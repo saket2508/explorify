@@ -1,13 +1,13 @@
 import React from "react";
 
 
-export default function Tracks(){
+export default function Recent(){
     return(
         <>
         <div className="flex-1 overflow-y-scroll">
               <div className="relative bg-gray-100">
-                    <img className="h-64 sm:h-80 w-full object-cover" src="https://images.unsplash.com/photo-1518609878373-06d740f60d8b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"/>
-                    <div className="absolute bottom-0 left-0 right-0 pb-10 pl-5 text-3xl text-white font-semibold">Your Top Tracks</div>
+                    <img className="h-64 sm:h-80 w-full object-cover" src="https://images.unsplash.com/photo-1619983081593-e2ba5b543168?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"/>
+                    <div className="absolute bottom-0 left-0 right-0 pb-10 pl-5 text-3xl text-white font-semibold">Recently Played</div>
                 </div>
                 <div className="container bg-gray-100">
                 <div className="py-4 px-5 flex items-center justify-between hover:bg-gray-200">
