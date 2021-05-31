@@ -9,3 +9,13 @@
 .light body{
     background-color: #FFFFFF;
 }
+
+.text-container{
+    display: flex;
+    justify-self: center;
+    align-items: center;
+}
+
+.spotify{
+    background-color: #1db954;
+}

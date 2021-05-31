@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Artists from "./tabs/Artists";
 import Tracks from "./tabs/Tracks";
 import Recent from "./tabs/Recent";
@@ -8,11 +8,70 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import { ThemeContext } from "./context/ThemeContext";
+import { ThemeContext } from "./providers/ThemeContext";
+import useAuth from "./hooks/useAuth";
+import SpotifyWebApi from "spotify-web-api-node";
 
-export default function Home() {
 
+const spotifyWebApi = new SpotifyWebApi({
+  clientId:'f03e3b87cf5e45a89bbf4552cc4f1205'
+})
+
+
+export default function Home({code}) {
   const { colorTheme, setTheme } = React.useContext(ThemeContext)
+  const [userProfile, setUserProfile] = useState({})
+  const [likedTracks, setLikedTracks] = useState()
+  const [topArtists, setTopArtists] = useState()
+  const [recentlyPlayed, setRecentlyPlayed] = useState()
+
+  useEffect(() => {
+    if(!code) return
+    spotifyWebApi.setAccessToken(code)
+  }, [code])
+
+  const getUserProfile = () => {
+    spotifyWebApi.getMe()
+      .then(function(data){
+        setUserProfile(data.body)
+      }, function(err){
+        console.log('something went wrong', err)
+      })
+  }
+
+  const getLikedTracks = () => {
+    spotifyWebApi.getMyTopTracks()
+      .then(function(data){
+        setLikedTracks(data.body.items)
+      }, function(err){
+        console.log('Something went wrong', err)
+      })
+  }
+
+  const getLikedArtists = () => {
+    spotifyWebApi.getMyTopArtists()
+      .then(function(data){
+        setTopArtists(data.body.items)
+      }, function(err){
+        console.log('Something went wrong', err)
+      })
+  }
+
+  const getRecentlyPlayedTracks = () => {
+    spotifyWebApi.getMyRecentlyPlayedTracks()
+      .then(function(data){
+        setRecentlyPlayed(data.body.items)
+      }, function(err){
+        console.log('Something went wrong', err)
+      })
+  }
+
+  useEffect(() => {
+    getUserProfile()
+    getLikedTracks()
+    getLikedArtists()
+    getRecentlyPlayedTracks()
+  }, [])
 
   return (
       <div className="Home">
@@ -24,7 +83,7 @@ export default function Home() {
               Explorify
             </div>
             <div className="pt-20 md:px-4 lg:px-6">
-              <nav className="flex flex-col gap-6 border-b pb-5 border-gray-300 dark:border-gray-700">
+              <nav className="flex flex-col gap-6">
                 <Link to="/">
                  <a className = "text-text-secondary-light dark:text-text-secondary-dark hover:text-black dark:hover:text-white">
                   <div className="font-medium py-3 flex items-center">
@@ -63,22 +122,23 @@ export default function Home() {
                 </Link>
               </nav>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 pb-10 md:px-4 lg:px-6">
-            <button onClick={() => setTheme(colorTheme)} className="text-text-secondary-light dark:text-text-secondary-dark pt-5">
+            <div className="absolute bottom-0 left-0 right-0 pb-10 md:px-4 lg:px-6 flex flex-col">
+            <div className="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark hover:text-black dark:hover:text-white">Sign Out</div>
+            <button onClick={() => setTheme(colorTheme)} className="text-text-secondary-light dark:text-text-secondary-dark hover:text-black dark:hover:text-white pt-5">
                     {colorTheme==='dark' ? <div className="font-medium py-3 flex items-center">
-                    Dark
-                      <span className="pl-2">
+                    <span className="pr-2">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                           <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
                         </svg>
                       </span>
+                    Dark
                     </div> : <div className="font-medium text-sm py-3 flex items-center">
-                    Light
-                      <span className="pl-2">
+                    <span className="pr-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                           <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
                         </svg>
                       </span>
+                    Light
                     </div>}
                   </button>
             </div>
@@ -86,13 +146,13 @@ export default function Home() {
           <main className="flex-1 flex overflow-hidden bg-card-light dark:bg-card-dark">
             <Switch>
               <Route exact path="/">
-                <Artists/>
+                <Artists data={topArtists}/>
               </Route>
               <Route exact path="/top-tracks">
-                <Tracks/>
+                <Tracks data={likedTracks}/>
               </Route>
               <Route exact path="/recently-played">
-                <Recent/>
+                <Recent data={recentlyPlayed}/>
               </Route>
             </Switch>
           </main>
@@ -104,13 +164,13 @@ export default function Home() {
           <Router>
             <Switch>
               <Route exact path="/">
-                <Artists/>
+                <Artists data={topArtists}/>
               </Route>
               <Route exact path="/top-tracks">
-                <Tracks/>
+                <Tracks data={likedTracks}/>
               </Route>
               <Route exact path="/recently-played">
-                <Recent/>
+                <Recent data={recentlyPlayed}/>
               </Route>
             </Switch>
           <div className="flex-0 sticky overflow-hidden bottom-0 left-0 right-0">
@@ -153,7 +213,7 @@ export default function Home() {
                   </svg>
                   Dark
                 </span> : <span className="flex flex-col items-center text-xs">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                   </svg>
                   Light
