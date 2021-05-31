@@ -11,12 +11,14 @@ export default function useTheme() {
           }
         }
 
-        // otherwise get theme preference
-        const userMedia = window.matchMedia('(prefers-color-scheme: light)')
+        // otherwise get system theme preference
+        const userMedia = window.matchMedia('(prefers-color-scheme: dark)')
         if (userMedia.matches) {
-            return 'light'
+            return 'dark'
         }
-        return 'dark'
+        else{
+          return 'light'
+        }
       }
 
     const [ theme, setTheme ] = React.useState(getInitialTheme)
@@ -30,5 +32,5 @@ export default function useTheme() {
 
     }, [theme, colorTheme])
 
-    return [colorTheme, setTheme];
+    return {colorTheme, setTheme}
 }

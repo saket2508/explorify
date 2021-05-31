@@ -4,8 +4,6 @@ import useTheme from "./hooks/useTheme";
 
 function App() {
 
-  const [colorTheme, setTheme] = useTheme()
-
   return (
     <div className="App">
       <Home/>
