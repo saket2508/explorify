@@ -26,7 +26,8 @@ export default function useAuth(code) {
 
   const getTokenStatus = () => {
     if(localStorage.getItem('timestamp')){
-      return (Date.now() - localStorage.getItem('timestamp'))>= 3600000
+      console.log(Date.now() - localStorage.getItem('timestamp'))
+      return (Date.now() - localStorage.getItem('timestamp'))>= 360000
     }
     else{
       return false
@@ -38,11 +39,14 @@ export default function useAuth(code) {
     const [refreshToken, setRefreshToken] = useState(getRefreshToken);
     const [expiresIn, setExpiresIn] = useState(getExpiresIn);
     const tokenExpired = getTokenStatus()
+
+    console.log(tokenExpired)
   
     useEffect(() => {
-      if(!code)
+      if(!code){
         return 
-      if(accessToken==='null')
+      }
+      if(accessToken==='null'){
         axios.post('http://localhost:5000/login', {
             code
         }).then(res => {
@@ -58,10 +62,13 @@ export default function useAuth(code) {
             console.error(err)
             window.location = '/'
         })
+      }
     }, [code])
 
     useEffect(() => {
-      if(refreshToken==='null') return
+      if(refreshToken==='null'){ 
+        return
+      }
       if(tokenExpired===true){
         axios.post("http://localhost:5000/refresh", {
           refreshToken,

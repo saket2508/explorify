@@ -123,8 +123,9 @@ export default function Home({code}) {
               </nav>
             </div>
             <div className="absolute bottom-0 left-0 right-0 pb-10 md:px-4 lg:px-6 flex flex-col">
-            <div className="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark hover:text-black dark:hover:text-white">Sign Out</div>
-            <button onClick={() => setTheme(colorTheme)} className="text-text-secondary-light dark:text-text-secondary-dark hover:text-black dark:hover:text-white pt-5">
+            {userProfile && <div className="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">Welcome, {userProfile.display_name}</div>}
+            <div className="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark hover:text-black dark:hover:text-white pt-5">Sign Out</div>
+            <button onClick={() => setTheme(colorTheme)} className="text-sm text-text-secondary-light dark:text-text-secondary-dark hover:text-black dark:hover:text-white pt-5">
                     {colorTheme==='dark' ? <div className="font-medium py-3 flex items-center">
                     <span className="pr-2">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

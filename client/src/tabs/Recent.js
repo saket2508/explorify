@@ -15,7 +15,8 @@ export default function Recent(props){
                 <div className="container dark:bg-primary-dark bg-primary-light">
                 {data && data.map((item, index) => {
                   return(
-                  <div key={index} className="py-4 px-5 flex items-center justify-between hover:bg-card-light dark:hover:bg-card-dark">
+                  <a key={index} href={item.track.uri}>
+                    <div className="py-4 px-5 flex items-center justify-between hover:bg-card-light dark:hover:bg-card-dark">
                     <div className="inline-flex gap-3">
                       <div className="text-base font-semibold dark:text-text-primary-dark text-text-primary-light">{index+1}</div>
                       <div className="flex flex-col">
@@ -30,6 +31,7 @@ export default function Recent(props){
                     <img src={item.track.album.images[1].url} className="h-16 w-16 rounded-full sm:w-24 sm:h-24">
                     </img>
                 </div>
+                  </a>
                   )
                 })}
                 </div>
