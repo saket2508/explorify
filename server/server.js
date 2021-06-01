@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json())
 app.use(cors())
 
-const redirect_uri = process.env.NODE_ENV === 'production' ? 'https://explorify-music.netlify.app' : 'http://localhost:3000'
+const redirect_uri = process.env.NODE_ENV === 'production' ? 'https://explorify-music.netlify.app/' : 'http://localhost:3000'
 
 app.post("/refresh", (req, res) => {
     const refreshToken = req.body.refreshToken
