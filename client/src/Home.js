@@ -14,7 +14,7 @@ import SpotifyWebApi from "spotify-web-api-node";
 
 
 const spotifyWebApi = new SpotifyWebApi({
-  clientId:'f03e3b87cf5e45a89bbf4552cc4f1205'
+  clientId:process.env.REACT_APP_CLIENT_ID
 })
 
 
