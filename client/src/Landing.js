@@ -1,6 +1,6 @@
 import React from 'react'
 
-const redirect_uri = process.env.NODE_ENV === 'production' ? 'https://explorify-music.netlify.app' : 'http://localhost:3000'
+const redirect_uri = process.env.NODE_ENV === 'production' ? 'https://explorify-music.netlify.app/' : 'http://localhost:3000'
 
 const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirect_uri}&scope=user-read-private%20user-top-read%20playlist-read-private%20playlist-read-collaborative%20user-read-recently-played`
 
