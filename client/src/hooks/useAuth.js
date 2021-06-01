@@ -75,7 +75,6 @@ export default function useAuth(code) {
 
     useEffect(() => {
       if (!refreshToken || !expiresIn || refreshToken==='null' || expiresIn==='null'){ return };
-      console.log('running')
         if(tokenExpired===true){
           axios.post("http://localhost:5000/refresh", {
             refreshToken,

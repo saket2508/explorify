@@ -21,7 +21,7 @@ module.exports = {
             dark:colors.white
           },
           secondary:{
-            light:colors.gray[500],
+            light:colors.gray[400],
             dark:colors.gray[500]
           }
         }
