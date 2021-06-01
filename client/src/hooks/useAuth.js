@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 
-const SERVER_URI = process.env.NODE_ENV==='production' ? 'https://explorify-backend.herokuapp.com/' : 'http://localhost:5000'
+const SERVER_URI = process.env.NODE_ENV==='production' ? 'https://explorify-backend.herokuapp.com' : 'http://localhost:5000'
 
 export default function useAuth(code) {
 
