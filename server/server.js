@@ -21,8 +21,8 @@ app.post("/refresh", (req, res) => {
       .then(data => {
         console.log(data.body.access_token)
         res.json({
-          accessToken: data.body.accessToken,
-          expiresIn: data.body.expiresIn,
+          accessToken: data.body.access_token,
+          expiresIn: data.body.expires_in,
         })
       })
       .catch(err => {

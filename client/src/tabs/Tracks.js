@@ -16,8 +16,10 @@ export default function Tracks(props){
                 {data && data.map((item, index) => {
                  return <a key={index} href={item.uri}>
                    <div key={index} className="py-4 px-5 flex items-center justify-between hover:bg-card-light dark:hover:bg-card-dark">
-                  <div className="inline-flex gap-3">
-                    <div className="text-base font-semibold dark:text-text-primary-dark text-text-primary-light">{index+1}</div>
+                  <div className="inline-flex items-center gap-3 md:gap-6">
+                    <div className="text-base font-semibold dark:text-text-secondary-dark text-text-secondary-light">{index+1}</div>
+                    <img src={item.album.images[1].url} className="h-16 w-16 rounded-md">
+                    </img>
                     <div className="flex flex-col">
                       <div className="text-base font-semibold pb-1 dark:text-text-primary-dark text-text-primary-light">{item.name}</div>
                       <div className="text-sm font-semibold dark:text-text-secondary-dark text-text-secondary-light flex flex-wrap">
@@ -27,8 +29,6 @@ export default function Tracks(props){
                       </div>
                     </div>
                   </div>
-                  <img src={item.album.images[1].url} className="h-16 w-16 rounded-full sm:w-24 sm:h-24">
-                  </img>
                 </div>
                  </a>
                 })}

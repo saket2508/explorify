@@ -8,6 +8,9 @@ export default function Landing() {
         <div className="relative h-screen flex justify-center items-center">
             <img className="object-cover h-full w-full" src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"/>
             <div className="absolute">
+                <div className="text-white text-center pb-5 font-bold text-4xl tracking-wider">
+                    Explorify
+                </div>
             <a href={AUTH_URL}>
                 <div className="w-full flex bg-transparent border-2 border-white text-white hover:text-black hover:bg-white font-bold tracking-wider uppercase rounded-full px-6 py-3">
                     <span className="pr-2">

@@ -18,26 +18,19 @@ const spotifyWebApi = new SpotifyWebApi({
 })
 
 
-export default function Home({code}) {
+export default function Home(props) {
   const { colorTheme, setTheme } = React.useContext(ThemeContext)
-  const [userProfile, setUserProfile] = useState({})
   const [likedTracks, setLikedTracks] = useState()
   const [topArtists, setTopArtists] = useState()
   const [recentlyPlayed, setRecentlyPlayed] = useState()
+
+  const code = props.code
 
   useEffect(() => {
     if(!code) return
     spotifyWebApi.setAccessToken(code)
   }, [code])
 
-  const getUserProfile = () => {
-    spotifyWebApi.getMe()
-      .then(function(data){
-        setUserProfile(data.body)
-      }, function(err){
-        console.log('something went wrong', err)
-      })
-  }
 
   const getLikedTracks = () => {
     spotifyWebApi.getMyTopTracks()
@@ -67,7 +60,6 @@ export default function Home({code}) {
   }
 
   useEffect(() => {
-    getUserProfile()
     getLikedTracks()
     getLikedArtists()
     getRecentlyPlayedTracks()
@@ -123,9 +115,7 @@ export default function Home({code}) {
               </nav>
             </div>
             <div className="absolute bottom-0 left-0 right-0 pb-10 md:px-4 lg:px-6 flex flex-col">
-            {userProfile && <div className="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">Welcome, {userProfile.display_name}</div>}
-            <div className="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark hover:text-black dark:hover:text-white pt-5">Sign Out</div>
-            <button onClick={() => setTheme(colorTheme)} className="text-sm text-text-secondary-light dark:text-text-secondary-dark hover:text-black dark:hover:text-white pt-5">
+            <button onClick={() => setTheme(colorTheme)} className="text-sm text-text-secondary-light dark:text-text-secondary-dark hover:text-black dark:hover:text-white focus:outline-none pt-5">
                     {colorTheme==='dark' ? <div className="font-medium py-3 flex items-center">
                     <span className="pr-2">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -207,7 +197,7 @@ export default function Home({code}) {
                 </a>
               </Link>
               <div>
-               <button onClick={() => setTheme(colorTheme)} className="text-text-secondary-light hover:text-text-primary-light dark:text-text-primary-dark dark:hover:text-yellow-400">
+               <button onClick={() => setTheme(colorTheme)} className="text-text-secondary-light hover:text-text-primary-light dark:text-text-primary-dark dark:hover:text-yellow-400 focus:outline-none">
                {colorTheme==='dark' ? <span className="flex flex-col items-center text-xs">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />

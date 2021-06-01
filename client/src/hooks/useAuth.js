@@ -24,23 +24,30 @@ export default function useAuth(code) {
     return 'null'
   }
 
+  const SignOut = () => {
+    console.log('signing out')
+    setAccessToken()
+    setExpiresIn()
+    setRefreshToken()
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+    localStorage.removeItem('expires_in')
+    window.location = '/'
+  }
+
   const getTokenStatus = () => {
     if(localStorage.getItem('timestamp')){
-      console.log(Date.now() - localStorage.getItem('timestamp'))
-      return (Date.now() - localStorage.getItem('timestamp'))>= 360000
+      return (Date.now() - localStorage.getItem('timestamp'))>= 3600000
     }
-    else{
-      return false
-    }
+    return false
   }
 
 
     const [accessToken, setAccessToken] = useState(getAccessToken);
     const [refreshToken, setRefreshToken] = useState(getRefreshToken);
     const [expiresIn, setExpiresIn] = useState(getExpiresIn);
-    const tokenExpired = getTokenStatus()
+    const [tokenExpired, setTokenExpired] = useState(getTokenStatus)
 
-    console.log(tokenExpired)
   
     useEffect(() => {
       if(!code){
@@ -65,21 +72,32 @@ export default function useAuth(code) {
       }
     }, [code])
 
-    useEffect(() => {
-      if(refreshToken==='null'){ 
-        return
-      }
-      if(tokenExpired===true){
-        axios.post("http://localhost:5000/refresh", {
-          refreshToken,
-        }).then(res => {
-          setAccessToken(res.data.accessToken)
-          setExpiresIn(res.data.expiresIn)
-          localStorage.setItem('access_token', accessToken)
-          localStorage.setItem('timestamp', Date.now())
-        })
-      }
-    }, [refreshToken, tokenExpired])
 
-    return accessToken
+    useEffect(() => {
+      if (!refreshToken || !expiresIn || refreshToken==='null' || expiresIn==='null'){ return };
+      console.log('running')
+        if(tokenExpired===true){
+          axios.post("http://localhost:5000/refresh", {
+            refreshToken,
+          }).then(res => {
+            console.log(res.data)
+            console.log('Refreshing token')
+            setAccessToken(res.data.accessToken)
+            setExpiresIn(res.data.expiresIn)
+            localStorage.setItem('access_token', res.data.accessToken)
+            localStorage.setItem('expires_in', res.data.expiresIn)
+            localStorage.setItem('timestamp', Date.now())
+            window.location.href='/'
+          })
+          .catch(e => {
+            console.log('error')
+            console.error(e)
+            window.location = "/"
+          })
+        }
+    }, [tokenExpired])
+
+    return {accessToken, SignOut}
 }
+
+
