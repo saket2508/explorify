@@ -22,7 +22,7 @@ module.exports = {
           },
           secondary:{
             light:colors.gray[400],
-            dark:colors.gray[500]
+            dark:colors.gray[400]
           }
         }
       }
