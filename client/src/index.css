@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .dark body{
-    background-color: rgba(24, 24, 27, 1);
+    background-color: black;
 }
 
 .light body{

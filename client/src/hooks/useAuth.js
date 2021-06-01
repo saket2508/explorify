@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+
+const SERVER_URI = process.env.NODE_ENV==='production' ? 'https://explorify-backend.herokuapp.com/' : 'http://localhost:5000'
+
 export default function useAuth(code) {
 
   const getAccessToken = () => {
@@ -53,8 +56,8 @@ export default function useAuth(code) {
       if(!code){
         return 
       }
-      if(accessToken==='null'){
-        axios.post('http://localhost:5000/login', {
+      if(accessToken==='null' || !accessToken){
+        axios.post(`${SERVER_URI}/login`, {
             code
         }).then(res => {
             setAccessToken(res.data.accessToken)
@@ -76,7 +79,7 @@ export default function useAuth(code) {
     useEffect(() => {
       if (!refreshToken || !expiresIn || refreshToken==='null' || expiresIn==='null'){ return };
         if(tokenExpired===true){
-          axios.post("http://localhost:5000/refresh", {
+          axios.post(`${SERVER_URI}/refresh`, {
             refreshToken,
           }).then(res => {
             console.log(res.data)

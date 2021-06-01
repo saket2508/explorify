@@ -1,19 +1,22 @@
 const express = require('express');
 const cors = require('cors')
+const dotenv = require('dotenv')
 const spotifyWebApi = require('spotify-web-api-node');
 
+dotenv.config();
 
 const app = express();
 app.use(express.json())
 app.use(cors())
 
+const redirect_uri = process.env.NODE_ENV === 'production' ? 'https://explorify-music.netlify.app' : 'http://localhost:3000'
 
 app.post("/refresh", (req, res) => {
     const refreshToken = req.body.refreshToken
     const spotifyApi = new spotifyWebApi({
-        redirectUri:'http://localhost:3000',
-        clientId:'f03e3b87cf5e45a89bbf4552cc4f1205',
-        clientSecret:'f5f6ae2d0b684a7d95ad4c0e83489cc4',
+        redirectUri:redirect_uri,
+        clientId:process.env.CLIENT_ID,
+        clientSecret:process.env.CLIENT_SECRET,
         refreshToken,
     })
     spotifyApi
@@ -30,12 +33,13 @@ app.post("/refresh", (req, res) => {
       })
   })
 
+
 app.post('/login', (req, res) => {
     const code = req.body.code
     const spotifyAPI = new spotifyWebApi({
-        redirectUri:'http://localhost:3000',
-        clientId:'f03e3b87cf5e45a89bbf4552cc4f1205',
-        clientSecret:'f5f6ae2d0b684a7d95ad4c0e83489cc4'
+        redirectUri:redirect_uri,
+        clientId:process.env.CLIENT_ID,
+        clientSecret:process.env.CLIENT_SECRET,
     })
     spotifyAPI.authorizationCodeGrant(code).then(data => {
         res.json({
@@ -48,7 +52,7 @@ app.post('/login', (req, res) => {
     })
 })
 
-const port = 5000
+const port = process.env.PORT || 5000
 
 
 app.listen(port, () => {

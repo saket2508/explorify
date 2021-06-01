@@ -7,7 +7,7 @@ const code = new URLSearchParams(window.location.search).get("code")
 
 function App() {
   const {accessToken, SignOut} = useAuth(code)
-  return accessToken==="null" ? <Landing/>:  <Home code={accessToken} signOut = {SignOut}/>
+  return accessToken==="null" || !accessToken ? <Landing/>:  <Home code={accessToken} signOut = {SignOut}/>
 }
 
 export default App;

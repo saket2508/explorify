@@ -7,7 +7,7 @@ export default function Artists(props){
 
     return(
         <>
-        <div className="flex-1 overflow-y-scroll">
+        <div className="dark:bg-primary-dark bg-primary-light flex-1 overflow-y-scroll">
               <div className="relative dark:bg-primary-dark bg-primary-light">
                     <img className="h-64 sm:h-80 w-full object-cover" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"/>
                     <div className="absolute bottom-0 left-0 right-0 pb-10 pl-5 text-3xl text-white font-semibold">Your Top Artists</div>
@@ -24,8 +24,8 @@ export default function Artists(props){
                             <div className="flex flex-col">
                               <div className="text-base font-semibold pb-1 dark:text-text-primary-dark text-text-primary-light">{item.name}</div>
                               <div className="capitalize text-sm font-semibold dark:text-text-secondary-dark text-text-secondary-light flex flex-wrap">
-                                {item.genres[0]} {item.genres.slice(1).map((genre) => {
-                                  return `, ${genre}`
+                                {item.genres[0]}{item.genres.length>1 && item.genres.length<=3 && item.genres.slice(1, 3).map((genre, key) => {
+                                  return  <span key={key}>, {genre}</span>
                                 })}
                               </div>
                             </div>

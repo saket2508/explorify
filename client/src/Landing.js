@@ -1,6 +1,9 @@
 import React from 'react'
 
-const AUTH_URL = "https://accounts.spotify.com/authorize?client_id=f03e3b87cf5e45a89bbf4552cc4f1205&response_type=code&redirect_uri=http://localhost:3000&scope=user-read-private%20user-top-read%20playlist-read-private%20playlist-read-collaborative%20user-read-recently-played"
+const redirect_uri = process.env.NODE_ENV === 'production' ? 'https://explorify-music.netlify.app' : 'http://localhost:3000'
+
+const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirect_uri}&scope=user-read-private%20user-top-read%20playlist-read-private%20playlist-read-collaborative%20user-read-recently-played`
+
 
 export default function Landing() {
 
