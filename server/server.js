@@ -58,7 +58,6 @@ app.get('/', (req, res) => {
   res.send('Backend server running')
 })
 
-
 app.listen(port, () => {
     console.log('Listening on port 5000')
 })
