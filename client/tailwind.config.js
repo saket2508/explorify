@@ -21,11 +21,15 @@ module.exports = {
             dark:colors.white
           },
           secondary:{
-            light:colors.gray[400],
+            light:colors.gray[500],
             dark:colors.gray[400]
           }
         }
-      }
+      },
+      animation: {
+        bounce200: 'bounce 1s infinite 200ms',
+        bounce400: 'bounce 1s infinite 400ms',
+    },
     },
   },
   variants: {

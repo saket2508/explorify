@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Artists from "./tabs/Artists";
 import Tracks from "./tabs/Tracks";
 import Recent from "./tabs/Recent";
@@ -9,65 +9,72 @@ import {
   Link
 } from "react-router-dom";
 import { ThemeContext } from "./providers/ThemeContext";
-import useAuth from "./hooks/useAuth";
-import SpotifyWebApi from "spotify-web-api-node";
+import axios from "axios";
 
-
-const spotifyWebApi = new SpotifyWebApi({
-  clientId:process.env.REACT_APP_CLIENT_ID
-})
 
 
 export default function Home(props) {
-  const { colorTheme, setTheme } = React.useContext(ThemeContext)
-  const [likedTracks, setLikedTracks] = useState()
-  const [topArtists, setTopArtists] = useState()
-  const [recentlyPlayed, setRecentlyPlayed] = useState()
-
-  const [ activeTab, setActiveTab ] = useState('Artists')
-
-  const code = props.code
-
-  useEffect(() => {
-    if(!code) return
-    spotifyWebApi.setAccessToken(code)
-  }, [code])
 
 
-  const getLikedTracks = () => {
-    spotifyWebApi.getMyTopTracks()
-      .then(function(data){
-        setLikedTracks(data.body.items)
-      }, function(err){
-        console.log('Something went wrong', err)
-      })
+  const getPathName = () => {
+    if(window.location.pathname==='/recently-played'){
+      return 'Recent'
+    }
+    else if(window.location.pathname === '/top-tracks'){
+      return 'Tracks'
+    }
+    else{
+      return 'Artists'
+    }
   }
 
-  const getLikedArtists = () => {
-    spotifyWebApi.getMyTopArtists()
-      .then(function(data){
-        setTopArtists(data.body.items)
-      }, function(err){
-        console.log('Something went wrong', err)
-      })
+  const { colorTheme, setTheme } = useContext(ThemeContext)
+  const [ likedTracks, setLikedTracks ] = useState()
+  const [ topArtists, setTopArtists ] = useState()
+  const [ recentlyPlayed, setRecentlyPlayed ] = useState()
+
+  const [ activeTab, setActiveTab ] = useState(getPathName)
+
+  const code = props.code
+  
+  const headers = {
+    Authorization: `Bearer ${code}`,
+    'Content-Type': 'application/json',
   }
 
   const getRecentlyPlayedTracks = () => {
-    spotifyWebApi.getMyRecentlyPlayedTracks()
-      .then(function(data){
-        setRecentlyPlayed(data.body.items)
+    axios.get('https://api.spotify.com/v1/me/player/recently-played', {headers})
+      .then(res => res.data)
+      .then(data => {
+        setRecentlyPlayed(data.items)
       }, function(err){
-        console.log('Something went wrong', err)
+        console.log(err.message)
       })
   }
 
-  const changeActiveTab = tab => {
-    setActiveTab(tab)
+  const getTopArtists = () => {
+    axios.get('https://api.spotify.com/v1/me/top/artists?limit=20&time_range=long_term', {headers})
+      .then(res => res.data)
+      .then(data => {
+        setTopArtists(data.items)
+      }, function(err){
+        console.log(err.message)
+      })
+    }
+  
+  const getTopTracks = () => {
+    axios.get('https://api.spotify.com/v1/me/top/tracks?time_range=long_term', {headers})
+      .then(res => res.data)
+      .then(data => {
+        setLikedTracks(data.items)
+      }, function(err){
+        console.log(err.message)
+      })
   }
 
   useEffect(() => {
-    getLikedTracks()
-    getLikedArtists()
+    getTopArtists()
+    getTopTracks()
     getRecentlyPlayedTracks()
   }, [])
 
@@ -81,8 +88,9 @@ export default function Home(props) {
               Explorify
             </div>
             <div className="pt-20 md:px-4 lg:px-6">
-              <nav className="flex flex-col gap-6">
+              <nav className="animate-nav flex flex-col gap-6">
                 <Link to="/">
+                 <div className="nav-item">
                  {activeTab==='Artists' ? <a className = "text-gray-700 dark:text-white">
                   <div className="font-medium py-3 flex items-center">
                       <span className="pr-2">
@@ -92,7 +100,7 @@ export default function Home(props) {
                       </span>
                       Artists
                     </div>
-                 </a> : <a onClick={() => setActiveTab('Artists')} className = "text-gray-400 hover:text-gray-700 dark:hover:text-white">
+                 </a> : <a onClick={() => setActiveTab('Artists')} className = "dark:text-text-secondary-dark text-text-secondary-light hover:text-gray-700 dark:hover:text-white">
                   <div className="font-medium py-3 flex items-center">
                       <span className="pr-2">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -102,8 +110,10 @@ export default function Home(props) {
                       Artists
                     </div>
                  </a>}
+                 </div>
                 </Link>
                 <Link to="/top-tracks">
+                 <div className="nav-item">
                  {activeTab === 'Tracks' ? <a className="text-gray-700 dark:text-white">
                  <div className="font-medium py-3 flex items-center">
                     <span className="pr-2">
@@ -113,7 +123,7 @@ export default function Home(props) {
                     </span>
                     Tracks
                   </div>
-                 </a> : <a onClick={() => setActiveTab('Tracks')} className="text-gray-400 hover:text-gray-700 dark:hover:text-white">
+                 </a> : <a onClick={() => setActiveTab('Tracks')} className="dark:text-text-secondary-dark text-text-secondary-light hover:text-gray-700 dark:hover:text-white">
                  <div className="font-medium py-3 flex items-center">
                     <span className="pr-2">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -123,32 +133,35 @@ export default function Home(props) {
                     Tracks
                   </div>
                  </a>}
+                 </div>
                 </Link>
                 <Link to="/recently-played">
-                 {activeTab==='Recent'? <a className="text-gray-700 dark:text-white">
+                  <div className="nav-item">
+                  {activeTab==='Recent'? <a className="text-gray-700 dark:text-white">
                   <div className="font-medium py-3 flex items-center">
                     <span className="pr-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </span>
                     Recent
                   </div>
-                  </a> : <a onClick={() => setActiveTab('Recent')} className="text-gray-400 hover:text-gray-700 dark:hover:text-white">
+                  </a> : <a onClick={() => setActiveTab('Recent')} className="dark:text-text-secondary-dark text-text-secondary-light hover:text-gray-700 dark:hover:text-white">
                   <div className="font-medium py-3 flex items-center">
                     <span className="pr-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </span>
                     Recent
                   </div>
                   </a>}
+                  </div>
                 </Link>
               </nav>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 pb-10 md:px-4 lg:px-6 flex flex-col">
-            <button onClick={() => setTheme(colorTheme)} className="text-text-secondary-light dark:text-text-secondary-dark hover:text-black dark:hover:text-white focus:outline-none pt-5">
+            <div className="absolute bottom-0 left-0 right-0 pb-10 md:px-4 lg:px-6 flex flex-col font-medium dark:text-text-secondary-dark text-text-secondary-light">
+            <button onClick={() => setTheme(colorTheme)} className="focus:outline-none pt-5">
                     {colorTheme==='dark' ? <div className="font-medium py-3 flex items-center">
                     <span className="pr-2">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -158,9 +171,9 @@ export default function Home(props) {
                     Dark
                     </div> : <div className="font-medium py-3 flex items-center">
                     <span className="pr-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
-                        </svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+                      </svg>
                       </span>
                     Light
                     </div>}
@@ -207,7 +220,7 @@ export default function Home(props) {
                     </svg>
                     Top Artists
                   </span>
-                </a> : <a onClick={() => setActiveTab('Artists')} className="text-gray-400 hover:text-black dark:hover:text-white">
+                </a> : <a onClick={() => setActiveTab('Artists')} className="dark:text-text-secondary-dark text-text-secondary-light hover:text-black dark:hover:text-white">
                   <span className="flex flex-col text-xs items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
@@ -224,7 +237,7 @@ export default function Home(props) {
                     </svg>
                     Top Tracks
                   </span>
-                </a> : <a onClick={() => setActiveTab('Tracks')} className="text-gray-400 hover:text-black dark:hover:text-white">
+                </a> : <a onClick={() => setActiveTab('Tracks')} className="dark:text-text-secondary-dark text-text-secondary-light hover:text-black dark:hover:text-white">
                   <span className="flex flex-col text-xs items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -241,7 +254,7 @@ export default function Home(props) {
                     </svg>
                     Recent
                   </span>
-                </a> : <a onClick={() => setActiveTab('Recent')} className="text-gray-400 hover:text-black dark:hover:text-white">
+                </a> : <a onClick={() => setActiveTab('Recent')} className="dark:text-text-secondary-dark text-text-secondary-light hover:text-black dark:hover:text-white">
                   <span className="flex flex-col items-center text-xs">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -259,7 +272,7 @@ export default function Home(props) {
                   Dark
                 </span> : <span className="flex flex-col items-center text-xs">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                   Light
                 </span>}

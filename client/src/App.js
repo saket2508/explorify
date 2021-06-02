@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import Home from "./Home";
 import Landing from "./Landing";
-import useAuth from "./hooks/useAuth";
+import { AuthContext } from "./providers/AuthContext";
 
-const code = new URLSearchParams(window.location.search).get("code")
 
 function App() {
-  const {accessToken, SignOut} = useAuth(code)
-  return accessToken==="null" || !accessToken ? <Landing/>:  <Home code={accessToken} signOut = {SignOut}/>
+  const {accessToken} = useContext(AuthContext)
+  return accessToken==="null" || !accessToken ? <Landing/>:  <Home code={accessToken}/>
 }
 
 export default App;

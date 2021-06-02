@@ -13,9 +13,14 @@ export default function Recent(props){
                     <div className="absolute bottom-0 left-0 right-0 pb-10 pl-5 text-3xl text-white font-semibold">Recently Played</div>
                 </div>
                 <div className="container dark:bg-primary-dark bg-primary-light">
+                {!data && <div className="flex justify-center items-center mt-20">
+                      <div className="h-2.5 w-2.5 bg-text-secondary-light dark:bg-text-secondary-dark rounded-full mr-1 animate-bounce"></div>
+                      <div className="h-2.5 w-2.5 bg-text-secondary-light dark:bg-text-secondary-dark rounded-full mr-1 animate-bounce200"></div>
+                      <div className="h-2.5 w-2.5 bg-text-secondary-light dark:bg-text-secondary-dark rounded-full animate-bounce400"></div>
+                    </div>}
                 {data && data.map((item, index) => {
                   return(
-                  <a key={index} href={item.track.uri}>
+                  <a className="list-item" key={index} href={item.track.uri}>
                     <div className="py-4 px-5 flex items-center justify-between hover:bg-card-light dark:hover:bg-card-dark">
                     <div className="inline-flex items-center gap-3 md:gap-6">
                       <div className="text-base font-semibold dark:text-text-secondary-dark text-text-secondary-light">{index+1}</div>

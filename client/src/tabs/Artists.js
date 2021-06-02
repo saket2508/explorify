@@ -12,10 +12,15 @@ export default function Artists(props){
                     <img className="h-64 sm:h-80 w-full object-cover" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"/>
                     <div className="absolute bottom-0 left-0 right-0 pb-10 pl-5 text-3xl text-white font-semibold">Your Top Artists</div>
                 </div>
-                <div className="ease-out container dark:bg-primary-dark bg-primary-light">
+                <div className="container dark:bg-primary-dark bg-primary-light">
+                  {!data && <div className="flex justify-center items-center mt-20">
+                      <div className="h-2.5 w-2.5 bg-text-secondary-light dark:bg-text-secondary-dark rounded-full mr-1 animate-bounce"></div>
+                      <div className="h-2.5 w-2.5 bg-text-secondary-light dark:bg-text-secondary-dark rounded-full mr-1 animate-bounce200"></div>
+                      <div className="h-2.5 w-2.5 bg-text-secondary-light dark:bg-text-secondary-dark rounded-full animate-bounce400"></div>
+                    </div>}
                   {data && data.map((item, index) => {
                     return (
-                      <a key={index} href={item.uri}>
+                      <a className="list-item" key={index} href={item.uri}>
                         <div key={index} className="py-4 px-5 flex items-center justify-between hover:bg-card-light dark:hover:bg-card-dark">
                           <div className="inline-flex items-center gap-3 md:gap-6">
                             <div className="text-base font-semibold dark:text-text-secondary-dark text-text-secondary-light">{index+1}</div>
