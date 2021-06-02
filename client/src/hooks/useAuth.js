@@ -28,7 +28,7 @@ export default function useAuth(code) {
   }
 
   const SignOut = () => {
-    console.log('signing out')
+    // console.log('signing out')
     setAccessToken()
     setExpiresIn()
     setRefreshToken()
@@ -51,12 +51,15 @@ export default function useAuth(code) {
     const [expiresIn, setExpiresIn] = useState(getExpiresIn);
     const [tokenExpired, setTokenExpired] = useState(getTokenStatus)
 
+    const [ connecting, setConnecting ] = useState(false)
+
   
     useEffect(() => {
       if(!code){
         return 
       }
       if(accessToken==='null' || !accessToken){
+        setConnecting(true)
         axios.post(`${SERVER_URI}/login`, {
             code
         }).then(res => {
@@ -67,9 +70,11 @@ export default function useAuth(code) {
             localStorage.setItem('refresh_token', res.data.refreshToken)
             localStorage.setItem('expires_in', res.data.expiresIn)
             localStorage.setItem('timestamp', Date.now())
+            setConnecting(false)
             window.history.pushState({}, null, "/")
         }).catch(err => {
             console.error(err)
+            setConnecting(false)
             window.location = '/'
         })
       }
@@ -82,8 +87,6 @@ export default function useAuth(code) {
           axios.post(`${SERVER_URI}/refresh`, {
             refreshToken,
           }).then(res => {
-            console.log(res.data)
-            console.log('Refreshing token')
             setAccessToken(res.data.accessToken)
             setExpiresIn(res.data.expiresIn)
             localStorage.setItem('access_token', res.data.accessToken)
@@ -99,7 +102,7 @@ export default function useAuth(code) {
         }
     }, [tokenExpired])
 
-    return {accessToken, SignOut}
+    return {accessToken, connecting}
 }
 
 

@@ -160,7 +160,7 @@ export default function Home(props) {
                 </Link>
               </nav>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 pb-10 md:px-4 lg:px-6 flex flex-col font-medium dark:text-text-secondary-dark text-text-secondary-light">
+            <div className="absolute bottom-10 left-0 right-0 md:px-4 lg:px-6 flex flex-col font-medium dark:text-text-secondary-dark text-text-secondary-light">
             <button onClick={() => setTheme(colorTheme)} className="focus:outline-none pt-5">
                     {colorTheme==='dark' ? <div className="font-medium py-3 flex items-center">
                     <span className="pr-2">
