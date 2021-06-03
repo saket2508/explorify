@@ -5,16 +5,20 @@
   "dependencies": {
     "@craco/craco": "^6.1.2",
     "@heroicons/react": "^1.0.1",
+    "@tailwindcss/postcss7-compat": "^2.1.4",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "autoprefixer": "^9.8.6",
     "axios": "^0.21.1",
+    "postcss": "^7.0.35",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "spotify-web-api-js": "^1.5.1",
     "spotify-web-api-node": "^5.0.2",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.4",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -41,9 +45,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "autoprefixer": "^9.8.6",
-    "postcss": "^8.2.10",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2"
-  }
+  "devDependencies": {}
 }
