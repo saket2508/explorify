@@ -30,7 +30,7 @@ export default function Tracks(props){
                     </div>}
                 {data && data.map((item, index) => {
                  return <a className="list-item" key={index} href={item.uri}>
-                   <div key={index} className="py-4 px-5 flex items-center justify-between hover:bg-card-light dark:hover:bg-card-dark">
+                   <div key={index} className="py-4 px-5 hover:bg-card-light dark:hover:bg-card-dark">
                   <div className="grid grid-flow-col w-full justify-start items-center gap-6">
                     <div className="text-base font-semibold dark:text-text-secondary-dark text-text-secondary-light">{index+1}</div>
                    {item.album.images && <img src={item.album.images[0].url} className="h-16 w-16 rounded-md object-cover">
