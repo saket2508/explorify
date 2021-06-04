@@ -45,7 +45,7 @@ export default function Artists({long_term, short_term, medium_term}){
                 </div>
                 <div className="container dark:bg-primary-dark bg-primary-light my-5">
                   <div className="px-5 py-4">
-                    <nav className="flex items-center justify-start gap-4 text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark">
+                    <nav className="grid grid-flow-col w-full items-center justify-start gap-4 sm:gap-6 text-xs sm:text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark">
                       {tab==='All Time' ? <div className="underline">All Time</div> : <div onClick={() => changeTab('All Time')} className="hover:underline">All Time</div>}
                       {tab==='Last 6 Months' ? <div className="underline">Last 6 Months</div> : <div onClick={() => changeTab('Last 6 Months')} className="hover:underline">Last 6 Months</div>}
                       {tab==='Last Month' ? <div className="underline">Last Month</div> : <div onClick={() => changeTab('Last Month')}  className="hover:underline">Last Month</div>}
@@ -63,12 +63,12 @@ export default function Artists({long_term, short_term, medium_term}){
                       <a className="list-item" key={index} href={item.uri}>
                         <div key={index} className="py-4 px-5 hover:bg-card-light dark:hover:bg-card-dark">
                           <div className="grid grid-flow-col w-full justify-start items-center gap-6">
-                            <div className="text-xs md:text-sm font-semibold dark:text-text-secondary-dark text-text-secondary-light flex justify-end">{index+1}</div>
+                            <div className="text-xs sm:text-sm font-semibold dark:text-text-secondary-dark text-text-secondary-light flex justify-end">{index+1}</div>
                           { item.images &&  <img src={item.images[0].url} className="h-16 w-16 rounded-md object-cover flex-grow">
                           </img>}
                             <div className="flex flex-col flex-grow">
-                              <div className="text-sm md:text-base font-semibold pb-1 dark:text-text-primary-dark text-text-primary-light">{item.name}</div>
-                              <div className="capitalize text-xs md:text-sm font-semibold dark:text-text-secondary-dark text-text-secondary-light">
+                              <div className="text-sm sm:text-base font-semibold pb-1 dark:text-text-primary-dark text-text-primary-light">{item.name}</div>
+                              <div className="capitalize text-xs sm:text-sm font-semibold dark:text-text-secondary-dark text-text-secondary-light">
                                 {item.genres[0]}{item.genres.length>=3 && item.genres.slice(1, 3).map((genre, key) => {
                                   return  <span key={key}>, {genre}</span>
                                 })}

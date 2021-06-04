@@ -119,7 +119,7 @@ export default function Home(props) {
 
   return (
       <div className="transition duration-500">
-        <div className="hidden lg:block">
+        <div className="hidden xl:block">
         <div className="h-screen flex bg-gray-100 dark:bg-dark">
         <Router>
           <main className="relative w-64 dark:bg-card-dark bg-card-light">
@@ -217,7 +217,7 @@ export default function Home(props) {
         </div>
         </div>
   
-        <div className="lg:hidden min-h-screen flex flex-col bg-white dark:bg-card-dark">
+        <div className="xl:hidden min-h-screen flex flex-col bg-white dark:bg-card-dark">
           <Router>
           <Switch>
               <Route exact path="/">
@@ -231,7 +231,7 @@ export default function Home(props) {
               </Route>
             </Switch>
           <div className="flex-0 sticky overflow-hidden bottom-0 left-0 right-0">
-            <div className="py-5 px-10 bg-white dark:bg-card-dark text-gray-700 shadow-lg w-full flex justify-between">
+            <div className="py-5 px-10 bg-white dark:bg-card-dark text-gray-700 shadow-lg w-full flex justify-between sm:justify-around">
               <Link to="/">
                 {activeTab==='Artists' ? <a className="text-text-primary-light dark:text-text-primary-dark">
                   <span className="flex flex-col text-xs items-center">
