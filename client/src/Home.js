@@ -29,8 +29,18 @@ export default function Home(props) {
   }
 
   const { colorTheme, setTheme } = useContext(ThemeContext)
-  const [ likedTracks, setLikedTracks ] = useState()
-  const [ topArtists, setTopArtists ] = useState()
+  const [ likedTracks, setLikedTracks ] = useState({
+    'short_term':null,
+    'medium_term':null,
+    'long_term':null
+  })
+
+  const [ topArtists, setTopArtists ] = useState({
+    'short_term':null,
+    'medium_term':null,
+    'long_term':null
+  })
+
   const [ recentlyPlayed, setRecentlyPlayed ] = useState()
 
   const [ activeTab, setActiveTab ] = useState(getPathName)
@@ -53,20 +63,70 @@ export default function Home(props) {
   }
 
   const getTopArtists = () => {
-    axios.get('https://api.spotify.com/v1/me/top/artists?limit=20&time_range=long_term', {headers})
+    axios.get('https://api.spotify.com/v1/me/top/artists?limit=50&time_range=long_term', {headers})
       .then(res => res.data)
       .then(data => {
-        setTopArtists(data.items)
+        setTopArtists(() => {
+          topArtists.long_term = data.items
+          return topArtists
+        })   
+      }, function(err){
+        console.log(err.message)
+      })
+
+      axios.get('https://api.spotify.com/v1/me/top/artists?limit=50', {headers})
+      .then(res => res.data)
+      .then(data => {
+        setTopArtists(() => {
+          topArtists.medium_term = data.items
+          return topArtists
+        })   
+      }, function(err){
+        console.log(err.message)
+      })
+
+      axios.get('https://api.spotify.com/v1/me/top/artists?limit=50&time_range=short_term', {headers})
+      .then(res => res.data)
+      .then(data => {
+        setTopArtists(() => {
+          topArtists.short_term = data.items
+          return topArtists
+        })   
       }, function(err){
         console.log(err.message)
       })
     }
   
   const getTopTracks = () => {
-    axios.get('https://api.spotify.com/v1/me/top/tracks?time_range=long_term', {headers})
+    axios.get('https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=long_term', {headers})
       .then(res => res.data)
       .then(data => {
-        setLikedTracks(data.items)
+        setLikedTracks(() => {
+          likedTracks.long_term = data.items
+          return likedTracks
+        })     
+      }, function(err){
+        console.log(err.message)
+      })
+
+      axios.get('https://api.spotify.com/v1/me/top/tracks?limit=50', {headers})
+      .then(res => res.data)
+      .then(data => {
+        setLikedTracks(() => {
+          likedTracks.medium_term = data.items
+          return likedTracks
+        })   
+      }, function(err){
+        console.log(err.message)
+      })
+
+      axios.get('https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=short_term', {headers})
+      .then(res => res.data)
+      .then(data => {
+        setLikedTracks(() => {
+          likedTracks.short_term = data.items
+          return likedTracks
+        })  
       }, function(err){
         console.log(err.message)
       })
@@ -160,28 +220,9 @@ export default function Home(props) {
                 </Link>
               </nav>
             </div>
-            <div className="absolute bottom-10 left-0 right-0 md:px-4 lg:px-6 flex flex-col font-medium dark:text-text-secondary-dark text-text-secondary-light">
-            <button onClick={() => setTheme(colorTheme)} className="focus:outline-none pt-5">
-                    {colorTheme==='dark' ? <div className="font-medium py-3 flex items-center">
-                    <span className="pr-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                        </svg>
-                      </span>
-                    Dark
-                    </div> : <div className="font-medium py-3 flex items-center">
-                    <span className="pr-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                      </span>
-                    Light
-                    </div>}
-                  </button>
-            </div>
           </main>
           <main className="flex-1 flex overflow-hidden bg-card-light dark:bg-card-dark">
-            <Switch>
+          <Switch>
               <Route exact path="/">
                 <Artists data={topArtists}/>
               </Route>
@@ -199,7 +240,7 @@ export default function Home(props) {
   
         <div className="lg:hidden min-h-screen flex flex-col bg-white dark:bg-card-dark">
           <Router>
-            <Switch>
+          <Switch>
               <Route exact path="/">
                 <Artists data={topArtists}/>
               </Route>
