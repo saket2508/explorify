@@ -1,26 +1,28 @@
 import React, { useState, useContext, useEffect } from "react";
 import { ThemeContext } from "../providers/ThemeContext";
 
-export default function Tracks(props){
+export default function Tracks({long_term, short_term, medium_term}){
 
   const {colorTheme, setTheme } = useContext(ThemeContext)
-  const [data, setData] = useState(props.data.long_term)
+  const [data, setData] = useState(long_term)
   const [tab, setTab ] = useState('All Time')
 
-  useEffect(() => {
-    setData(props.data.long_term)
-  }, [props.data.long_term, props.data])
 
+  useEffect(() => {
+  if(long_term)
+    setData(long_term)
+  },[long_term, short_term, medium_term])
+  
   const changeTab = link => {
     setTab(link)
     if(link === 'All Time'){
-      setData(props.data.long_term)
+      setData(long_term)
     }
     else if(link === 'Last 6 Months'){
-      setData(props.data.medium_term)
+      setData(medium_term)
     }
     else{
-      setData(props.data.short_term)
+      setData(short_term)
     }
   }
 

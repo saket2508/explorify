@@ -29,17 +29,14 @@ export default function Home(props) {
   }
 
   const { colorTheme, setTheme } = useContext(ThemeContext)
-  const [ likedTracks, setLikedTracks ] = useState({
-    'short_term':null,
-    'medium_term':null,
-    'long_term':null
-  })
+  
+  const [topArtistsYear, setTopArtistsYear] = useState()
+  const [topArtistsSixMonths, setTopArtistsSixMonths] = useState()
+  const [topArtistsMonth, setTopArtistsMonth] = useState()
 
-  const [ topArtists, setTopArtists ] = useState({
-    'short_term':null,
-    'medium_term':null,
-    'long_term':null
-  })
+  const [likedTracksYear, setLikedTracksYear] = useState()
+  const [likedTracksSixMonths, setLikedTracksSixMonths] = useState()
+  const [likedTracksMonth, setLikedTracksMonth] = useState()
 
   const [ recentlyPlayed, setRecentlyPlayed ] = useState()
 
@@ -66,10 +63,7 @@ export default function Home(props) {
     axios.get('https://api.spotify.com/v1/me/top/artists?limit=50&time_range=long_term', {headers})
       .then(res => res.data)
       .then(data => {
-        setTopArtists(() => {
-          topArtists.long_term = data.items
-          return topArtists
-        })   
+        setTopArtistsYear(data.items) 
       }, function(err){
         console.log(err.message)
       })
@@ -77,10 +71,7 @@ export default function Home(props) {
       axios.get('https://api.spotify.com/v1/me/top/artists?limit=50', {headers})
       .then(res => res.data)
       .then(data => {
-        setTopArtists(() => {
-          topArtists.medium_term = data.items
-          return topArtists
-        })   
+        setTopArtistsSixMonths(data.items)
       }, function(err){
         console.log(err.message)
       })
@@ -88,10 +79,7 @@ export default function Home(props) {
       axios.get('https://api.spotify.com/v1/me/top/artists?limit=50&time_range=short_term', {headers})
       .then(res => res.data)
       .then(data => {
-        setTopArtists(() => {
-          topArtists.short_term = data.items
-          return topArtists
-        })   
+        setTopArtistsMonth(data.items)  
       }, function(err){
         console.log(err.message)
       })
@@ -101,10 +89,7 @@ export default function Home(props) {
     axios.get('https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=long_term', {headers})
       .then(res => res.data)
       .then(data => {
-        setLikedTracks(() => {
-          likedTracks.long_term = data.items
-          return likedTracks
-        })     
+        setLikedTracksYear(data.items)   
       }, function(err){
         console.log(err.message)
       })
@@ -112,10 +97,7 @@ export default function Home(props) {
       axios.get('https://api.spotify.com/v1/me/top/tracks?limit=50', {headers})
       .then(res => res.data)
       .then(data => {
-        setLikedTracks(() => {
-          likedTracks.medium_term = data.items
-          return likedTracks
-        })   
+        setLikedTracksSixMonths(data.items)
       }, function(err){
         console.log(err.message)
       })
@@ -123,10 +105,7 @@ export default function Home(props) {
       axios.get('https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=short_term', {headers})
       .then(res => res.data)
       .then(data => {
-        setLikedTracks(() => {
-          likedTracks.short_term = data.items
-          return likedTracks
-        })  
+        setLikedTracksMonth(data.items)
       }, function(err){
         console.log(err.message)
       })
@@ -224,10 +203,10 @@ export default function Home(props) {
           <main className="flex-1 flex overflow-hidden bg-card-light dark:bg-card-dark">
           <Switch>
               <Route exact path="/">
-                <Artists data={topArtists}/>
+                  <Artists long_term={topArtistsYear} medium_term={topArtistsSixMonths} short_term={topArtistsMonth}/>
               </Route>
               <Route exact path="/top-tracks">
-                <Tracks data={likedTracks}/>
+                  <Tracks long_term={likedTracksYear} medium_term={likedTracksSixMonths} short_term={likedTracksMonth}/>
               </Route>
               <Route exact path="/recently-played">
                 <Recent data={recentlyPlayed}/>
@@ -242,10 +221,10 @@ export default function Home(props) {
           <Router>
           <Switch>
               <Route exact path="/">
-                <Artists data={topArtists}/>
+                  <Artists long_term={topArtistsYear} medium_term={topArtistsSixMonths} short_term={topArtistsMonth}/>
               </Route>
               <Route exact path="/top-tracks">
-                <Tracks data={likedTracks}/>
+                  <Tracks long_term={likedTracksYear} medium_term={likedTracksSixMonths} short_term={likedTracksMonth}/>
               </Route>
               <Route exact path="/recently-played">
                 <Recent data={recentlyPlayed}/>
