@@ -19,8 +19,14 @@ export default function Home(props) {
   };
 
   const { colorTheme, setTheme } = useContext(ThemeContext);
-  const [likedTracks, setLikedTracks] = useState();
-  const [topArtists, setTopArtists] = useState();
+  const [topArtistsYear, setTopArtistsYear] = useState();
+  const [topArtistsSixMonths, setTopArtistsSixMonths] = useState();
+  const [topArtistsMonth, setTopArtistsMonth] = useState();
+
+  const [likedTracksYear, setLikedTracksYear] = useState();
+  const [likedTracksSixMonths, setLikedTracksSixMonths] = useState();
+  const [likedTracksMonth, setLikedTracksMonth] = useState();
+
   const [recentlyPlayed, setRecentlyPlayed] = useState();
 
   const [activeTab, setActiveTab] = useState(getPathName);
@@ -36,10 +42,16 @@ export default function Home(props) {
 
   const getTopArtists = async () => {
     try {
-      const { items } = await api.get(
-        "/me/top/artists?limit=20&time_range=long_term"
+      const topYearArtists = await api.get(
+        "/me/top/artists?limit=50&time_range=long_term"
       );
-      setTopArtists(items);
+      setTopArtistsYear(topYearArtists.items);
+      const topSixMonthArtists = await api.get("/me/top/artists?limit=50");
+      setTopArtistsSixMonths(topSixMonthArtists.items);
+      const topMonthArtists = await api.get(
+        "/me/top/artists?limit=50&time_range=short_term"
+      );
+      setTopArtistsMonth(topMonthArtists.items);
     } catch (err) {
       console.log(err.message);
     }
@@ -47,8 +59,16 @@ export default function Home(props) {
 
   const getTopTracks = async () => {
     try {
-      const { items } = await api.get("/me/top/tracks?time_range=long_term");
-      setLikedTracks(items);
+      const yearlyLikedTracks = await api.get(
+        "/me/top/tracks?limit=50&time_range=long_term"
+      );
+      setLikedTracksYear(yearlyLikedTracks.items);
+      const halfAnnuallyLikedTracks = await api.get("/me/top/tracks?limit=50");
+      setLikedTracksSixMonths(halfAnnuallyLikedTracks.items);
+      const monthlyLikedTracks = await api.get(
+        "/me/top/tracks?limit=50&time_range=short_term"
+      );
+      setLikedTracksMonth(monthlyLikedTracks);
     } catch (err) {
       console.log(err.message);
     }
@@ -61,8 +81,8 @@ export default function Home(props) {
   }, []);
 
   return (
-    <div className="Home">
-      <div className="hidden lg:block">
+    <div className="transition duration-500">
+      <div className="hidden xl:block">
         <div className="h-screen flex bg-gray-100 dark:bg-dark">
           <Router>
             <main className="relative w-64 dark:bg-card-dark bg-card-light">
@@ -74,7 +94,7 @@ export default function Home(props) {
                   <Link to="/">
                     <div className="nav-item">
                       {activeTab === "Artists" ? (
-                        <a className="text-gray-700 dark:text-white" href="##">
+                        <a className="text-gray-700 dark:text-white">
                           <div className="font-medium py-3 flex items-center">
                             <span className="pr-2">
                               <svg
@@ -213,54 +233,22 @@ export default function Home(props) {
                   </Link>
                 </nav>
               </div>
-              <div className="absolute bottom-10 left-0 right-0 md:px-4 lg:px-6 flex flex-col font-medium dark:text-text-secondary-dark text-text-secondary-light">
-                <button
-                  onClick={() => setTheme(colorTheme)}
-                  className="focus:outline-none pt-5"
-                >
-                  {colorTheme === "dark" ? (
-                    <div className="font-medium py-3 flex items-center">
-                      <span className="pr-2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                        </svg>
-                      </span>
-                      Dark
-                    </div>
-                  ) : (
-                    <div className="font-medium py-3 flex items-center">
-                      <span className="pr-2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </span>
-                      Light
-                    </div>
-                  )}
-                </button>
-              </div>
             </main>
             <main className="flex-1 flex overflow-hidden bg-card-light dark:bg-card-dark">
               <Switch>
                 <Route exact path="/">
-                  <Artists data={topArtists} />
+                  <Artists
+                    long_term={topArtistsYear}
+                    medium_term={topArtistsSixMonths}
+                    short_term={topArtistsMonth}
+                  />
                 </Route>
                 <Route exact path="/top-tracks">
-                  <Tracks data={likedTracks} />
+                  <Tracks
+                    long_term={likedTracksYear}
+                    medium_term={likedTracksSixMonths}
+                    short_term={likedTracksMonth}
+                  />
                 </Route>
                 <Route exact path="/recently-played">
                   <Recent data={recentlyPlayed} />
@@ -271,36 +259,44 @@ export default function Home(props) {
         </div>
       </div>
 
-      <div className="lg:hidden min-h-screen flex flex-col bg-white dark:bg-card-dark">
+      <div className="xl:hidden min-h-screen flex flex-col bg-white dark:bg-card-dark">
         <Router>
           <Switch>
             <Route exact path="/">
-              <Artists data={topArtists} />
+              <Artists
+                long_term={topArtistsYear}
+                medium_term={topArtistsSixMonths}
+                short_term={topArtistsMonth}
+              />
             </Route>
             <Route exact path="/top-tracks">
-              <Tracks data={likedTracks} />
+              <Tracks
+                long_term={likedTracksYear}
+                medium_term={likedTracksSixMonths}
+                short_term={likedTracksMonth}
+              />
             </Route>
             <Route exact path="/recently-played">
               <Recent data={recentlyPlayed} />
             </Route>
           </Switch>
           <div className="flex-0 sticky overflow-hidden bottom-0 left-0 right-0">
-            <div className="py-5 px-10 bg-white dark:bg-card-dark text-gray-700 shadow-lg w-full flex justify-between">
+            <div className="py-5 px-10 bg-white dark:bg-card-dark text-gray-700 shadow-lg w-full flex justify-between sm:justify-around">
               <Link to="/">
                 {activeTab === "Artists" ? (
                   <a className="text-text-primary-light dark:text-text-primary-dark">
                     <span className="flex flex-col text-xs items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 md:h-6 md:w-6"
+                        class="h-5 w-5 md:h-6 md:w-6"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
                       >
                         <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
                           d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
                         />
                       </svg>
@@ -315,15 +311,15 @@ export default function Home(props) {
                     <span className="flex flex-col text-xs items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 md:h-6 md:w-6"
+                        class="h-5 w-5 md:h-6 md:w-6"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
                       >
                         <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
                           d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
                         />
                       </svg>
@@ -424,50 +420,6 @@ export default function Home(props) {
                   </a>
                 )}
               </Link>
-              <div>
-                <button
-                  onClick={() => setTheme(colorTheme)}
-                  className="text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-white focus:outline-none"
-                >
-                  {colorTheme === "dark" ? (
-                    <span className="flex flex-col items-center text-xs">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 md:h-6 md:w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                        />
-                      </svg>
-                      Dark
-                    </span>
-                  ) : (
-                    <span className="flex flex-col items-center text-xs">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 md:h-6 md:w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                        />
-                      </svg>
-                      Light
-                    </span>
-                  )}
-                </button>
-              </div>
             </div>
           </div>
         </Router>
