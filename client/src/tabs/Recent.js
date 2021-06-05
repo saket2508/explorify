@@ -1,46 +1,61 @@
 import React from "react";
 
+export default function Recent(props) {
+  const { data } = props;
 
-export default function Recent(props){
-
-  const {data} = props
-
-    return(
-        <>
-        <div className="dark:bg-primary-dark bg-primary-light flex-1 overflow-y-scroll">
-              <div className="relative dark:bg-primary-dark bg-primary-light">
-                    <img className="h-64 sm:h-80 w-full object-cover" src="/images/recent_bg.jpg"/>
-                    <div className="absolute bottom-0 left-0 right-0 pb-10 pl-5 text-3xl text-white font-semibold">Recently Played</div>
-                </div>
-                <div className="container dark:bg-primary-dark bg-primary-light">
-                {!data && <div className="flex justify-center items-center mt-20">
-                      <div className="h-2.5 w-2.5 bg-text-secondary-light dark:bg-text-secondary-dark rounded-full mr-1 animate-bounce"></div>
-                      <div className="h-2.5 w-2.5 bg-text-secondary-light dark:bg-text-secondary-dark rounded-full mr-1 animate-bounce200"></div>
-                      <div className="h-2.5 w-2.5 bg-text-secondary-light dark:bg-text-secondary-dark rounded-full animate-bounce400"></div>
-                    </div>}
-                {data && data.map((item, index) => {
-                  return(
-                  <a className="list-item" key={index} href={item.track.uri}>
-                    <div className="py-4 px-5 flex items-center justify-between hover:bg-card-light dark:hover:bg-card-dark">
+  return (
+    <>
+      <div className="dark:bg-primary-dark bg-primary-light flex-1 overflow-y-scroll">
+        <div className="relative dark:bg-primary-dark bg-primary-light">
+          <img
+            className="h-64 sm:h-80 w-full object-cover"
+            src="/images/recent_bg.jpg"
+          />
+          <div className="absolute bottom-0 left-0 right-0 pb-10 pl-5 text-3xl text-white font-semibold">
+            Recently Played
+          </div>
+        </div>
+        <div className="container dark:bg-primary-dark bg-primary-light">
+          {!data && (
+            <div className="flex justify-center items-center mt-20">
+              <div className="h-2.5 w-2.5 bg-text-secondary-light dark:bg-text-secondary-dark rounded-full mr-1 animate-bounce"></div>
+              <div className="h-2.5 w-2.5 bg-text-secondary-light dark:bg-text-secondary-dark rounded-full mr-1 animate-bounce200"></div>
+              <div className="h-2.5 w-2.5 bg-text-secondary-light dark:bg-text-secondary-dark rounded-full animate-bounce400"></div>
+            </div>
+          )}
+          {data &&
+            data.map((item, index) => {
+              return (
+                <a className="list-item" key={index} href={item.track.uri}>
+                  <div className=" relative py-4 px-5 flex items-center justify-between hover:bg-card-light dark:hover:bg-card-dark">
                     <div className="inline-flex items-center gap-3 md:gap-6">
-                      <div className="text-base font-semibold dark:text-text-secondary-dark text-text-secondary-light">{index+1}</div>
-                      <img src={item.track.album.images[1].url} className="h-16 w-16 rounded-md">
-                      </img>
+                      <div className="text-base font-semibold dark:text-text-secondary-dark text-text-secondary-light">
+                        {index + 1}
+                      </div>
+                      <img
+                        src={item.track.album.images[1].url}
+                        className="h-16 w-16 rounded-md"
+                        alt=""
+                      ></img>
                       <div className="flex flex-col">
-                        <div className="text-base font-semibold pb-1 dark:text-text-primary-dark text-text-primary-light">{item.track.name}</div>
+                        <div className="text-base font-semibold pb-1 dark:text-text-primary-dark text-text-primary-light">
+                          <a href={item.track.uri}>{item.track.name}</a>
+                        </div>
                         <div className="text-sm font-semibold dark:text-text-secondary-dark text-text-secondary-light flex">
-                          {item.track.artists[0].name}{item.track.artists.length>1 && item.track.artists.slice(1).map((artist, key) => {
-                            return <span key={key}>, {artist.name}</span>
-                          })}
+                          {item.track.artists[0].name}
+                          {item.track.artists.length > 1 &&
+                            item.track.artists.slice(1).map((artist, key) => {
+                              return <span key={key}>, {artist.name}</span>;
+                            })}
                         </div>
                       </div>
                     </div>
-                </div>
-                  </a>
-                  )
-                })}
-                </div>
-            </div>
-        </>
-    )
+                  </div>
+                </a>
+              );
+            })}
+        </div>
+      </div>
+    </>
+  );
 }
