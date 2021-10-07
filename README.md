@@ -1,7 +1,46 @@
 ## Explorify
 
-- A React app that uses Spotify's Web API to get your favourite tracks, artists and recently played songs. You can also filter them by timeline and find out which songs or artists you listened to the most over the past month, six months, or year.
+## Overview
 
-- It is live [here](https://explorify-music.netlify.app/)
+- A React app that uses Spotify's Web API to show you insights on your music preferences along with your favourite tracks, artists and recently played songs.
 
-- Built using Create-react-app, Tailwind CSS, Express, and Node.
+- You can see which songs and artists you have listened to the most over the past month, six months, and year.
+
+- [Here](https://explorify-music.netlify.app/) is the preview of the app.
+
+- It has been built using Create-react-app, Tailwind CSS, Express, and Node.
+
+### Screenshots
+
+<img src="client/src/assets/landing.png"/>
+<br/> 
+<img src="client/src/assets/recent_tracks.png"/>
+<br/>
+<img src="client/src/assets/top_artists.png"/>
+<br/>
+
+### Installation
+
+- Clone and install dependencies locally
+```
+    git clone https://github.com/saket2508/explorify.git
+    cd explorify
+    npm install
+    cd server
+    npm install
+    cd..
+    cd client
+    npm install
+```
+- Make sure you have installed Node in your system.
+- Create a Spotify Developers Account and after you've logged in, create a new application.
+- Give your application a name and set the redirect URI to `localhost:3000`
+- Then, save its credentials in a `.env.local` file inside the `client` directory.
+
+## Running Locally
+- You can start the application in dev mode by running the following command in your terminal.
+```
+    npm run dev
+```
+- The server should run on port `localhost:5000` while the client is served on `localhost:3000`
+

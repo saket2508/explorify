@@ -8,7 +8,8 @@
     "npm": "6.14.7"
   },
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "server": "nodemon server.js"
   },
   "keywords": [],
   "author": "",

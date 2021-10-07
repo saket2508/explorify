@@ -1,0 +1,28 @@
+{
+  "name": "explorify",
+  "version": "1.0.0",
+  "description": "- A React app that uses Spotify's Web API to get your favourite tracks, artists and recently played songs. You can also filter them by timeline and find out which songs or artists you listened to the most over the past month, six months, or year.",
+  "main": "server.js",
+  "dependencies": {
+    "concurrently": "^6.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "npm run start --prefix server",
+    "server": "npm run server --prefix server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saket2508/explorify.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saket2508/explorify/issues"
+  },
+  "homepage": "https://github.com/saket2508/explorify#readme"
+}

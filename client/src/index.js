@@ -3,16 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import  ThemeProvider  from './providers/ThemeContext';
-import  AuthProvider  from './providers/AuthContext';
+import ThemeProvider  from './providers/ThemeContext';
+import SpotifyProvider from './providers/SpotifyContext'
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthProvider>
+    <SpotifyProvider>
       <ThemeProvider>
           <App />
       </ThemeProvider>
-    </AuthProvider>
+    </SpotifyProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

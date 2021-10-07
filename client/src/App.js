@@ -1,15 +1,22 @@
 import React, { useContext } from "react";
-import Home from "./Home";
-import Landing from "./Landing";
-import { AuthContext } from "./providers/AuthContext";
+import ErrorPage from "./pages/ErrorPage";
+import Home from "./pages/Home";
+import Landing from "./pages/Landing";
+import { SpotifyContext } from "./providers/SpotifyContext";
 
 
 function App() {
-  const { accessToken } = useContext(AuthContext)
+  const { isAuthenticated, error } = useContext(SpotifyContext)
+
+  if(error){
+    return(
+      <ErrorPage/>
+    )
+  }
   
-  return accessToken==="null" || !accessToken ? 
-    <Landing/>:  
-    <Home code={accessToken}/>
+  return isAuthenticated 
+    ? <Home/>
+    : <Landing/>
 }
 
 export default App;

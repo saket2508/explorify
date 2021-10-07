@@ -10,25 +10,24 @@ export default function useAuth(code) {
     if(localStorage.getItem('access_token')){
       return localStorage.getItem('access_token')
     }
-    return 'null'
+    return null
   }
 
   const getRefreshToken = () => {
     if(localStorage.getItem('refresh_token')){
       return localStorage.getItem('refresh_token')
     }
-    return 'null'
+    return null
   }
 
   const getExpiresIn = () => {
     if(localStorage.getItem('expires_in')){
       return localStorage.getItem('expires_in')
     }
-    return 'null'
+    return null
   }
 
   const SignOut = () => {
-    // console.log('signing out')
     setAccessToken()
     setExpiresIn()
     setRefreshToken()
@@ -46,23 +45,24 @@ export default function useAuth(code) {
   }
 
 
-    const [accessToken, setAccessToken] = useState(getAccessToken);
-    const [refreshToken, setRefreshToken] = useState(getRefreshToken);
-    const [expiresIn, setExpiresIn] = useState(getExpiresIn);
-    const [tokenExpired, setTokenExpired] = useState(getTokenStatus)
-
+    const [ accessToken, setAccessToken ] = useState(getAccessToken);
+    const [ refreshToken, setRefreshToken ] = useState(getRefreshToken);
+    const [ expiresIn, setExpiresIn ] = useState(getExpiresIn);
+    const [ tokenExpired, setTokenExpired ] = useState(getTokenStatus)
+    const [ error, setError ] = useState(false)
     const [ connecting, setConnecting ] = useState(false)
 
   
     useEffect(() => {
-      if(!code){
+      if(!code)
         return 
-      }
-      if(accessToken==='null' || !accessToken){
+      // not signed in
+      if(!accessToken){
         setConnecting(true)
         axios.post(`${SERVER_URI}/login`, {
             code
         }).then(res => {
+            console.log('Signing in')
             setAccessToken(res.data.accessToken)
             setRefreshToken(res.data.refreshToken)
             setExpiresIn(res.data.expiresIn)
@@ -74,35 +74,38 @@ export default function useAuth(code) {
             window.history.pushState({}, null, "/")
         }).catch(err => {
             console.error(err)
+            setError(true)
             setConnecting(false)
-            window.location = '/'
         })
       }
     }, [code])
 
 
     useEffect(() => {
-      if (!refreshToken || !expiresIn || refreshToken==='null' || expiresIn==='null'){ return };
-        if(tokenExpired===true){
+      if (!refreshToken || !expiresIn) 
+        return 
+
+      // token has expired
+        if(tokenExpired){
           axios.post(`${SERVER_URI}/refresh`, {
             refreshToken,
           }).then(res => {
+            console.log('Refreshing')
             setAccessToken(res.data.accessToken)
             setExpiresIn(res.data.expiresIn)
             localStorage.setItem('access_token', res.data.accessToken)
             localStorage.setItem('expires_in', res.data.expiresIn)
             localStorage.setItem('timestamp', Date.now())
-            window.location.href='/'
           })
           .catch(e => {
+            setError(true)
             console.log('error')
             console.error(e)
-            window.location = "/"
           })
         }
     }, [tokenExpired])
 
-    return {accessToken, connecting}
+    return { accessToken, connecting, SignOut, error, setError, tokenExpired }
 }
 
 
