@@ -6,7 +6,7 @@
 
 - You can see which songs and artists you have listened to the most over the past month, six months, and year.
 
-- [Here](https://explorify-music.netlify.app/) is the preview of the app.
+- Here is the final production link of the app: [Link](https://explorify-music.netlify.app/)
 
 - It has been built using Create-react-app, Tailwind CSS, Express, and Node.
 
