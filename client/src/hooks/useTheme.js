@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 
 export default function useTheme() {
 
@@ -21,10 +21,10 @@ export default function useTheme() {
         }
       }
 
-    const [ theme, setTheme ] = React.useState(getInitialTheme)
-    const colorTheme = theme==='dark' ? 'light' : 'dark'
+    const [ theme, setTheme ] = useState(getInitialTheme)
+    const colorTheme = theme ==='dark' ? 'light' : 'dark'
     
-    React.useEffect(() => {
+    useEffect(() => {
        const root = window.document.documentElement
        root.classList.remove(colorTheme)
        root.classList.add(theme)

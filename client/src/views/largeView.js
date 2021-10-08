@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import Container from '../components/container'
 import { BrowserRouter as Router, Link } from "react-router-dom";
-// Renders on large devices
 
+// Renders on large devices
 export default function LargeView() {
 
   const getPathName = () => {

@@ -3,7 +3,6 @@ import Container from '../components/container'
 import { BrowserRouter as Router, Link } from "react-router-dom";
 
 // Renders on small devices
-
 export default function SmallView() {
 
   const getPathName = () => {

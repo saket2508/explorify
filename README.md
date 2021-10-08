@@ -16,7 +16,9 @@
 <br/> 
 <img src="client/src/assets/recent_tracks.png"/>
 <br/>
-<img src="client/src/assets/top_artists.png"/>
+<img src="client/src/assets/artists_light.png"/>
+<br/>
+<img src="client/src/assets/fav_tracks_light.png"/>
 <br/>
 
 ### Installation

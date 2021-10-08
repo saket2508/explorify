@@ -71,7 +71,7 @@ function SpotifyProvider({ children }){
         }
         setIsAuthenticated(true)
         getData()
-    }, [accessToken])
+    }, [accessToken, error])
 
     return (
         <SpotifyContext.Provider 

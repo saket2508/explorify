@@ -45,9 +45,9 @@ export default function useAuth(code) {
   }
 
 
-    const [ accessToken, setAccessToken ] = useState(getAccessToken);
-    const [ refreshToken, setRefreshToken ] = useState(getRefreshToken);
-    const [ expiresIn, setExpiresIn ] = useState(getExpiresIn);
+    const [ accessToken, setAccessToken ] = useState(getAccessToken)
+    const [ refreshToken, setRefreshToken ] = useState(getRefreshToken)
+    const [ expiresIn, setExpiresIn ] = useState(getExpiresIn)
     const [ tokenExpired, setTokenExpired ] = useState(getTokenStatus)
     const [ error, setError ] = useState(false)
     const [ connecting, setConnecting ] = useState(false)
@@ -107,5 +107,3 @@ export default function useAuth(code) {
 
     return { accessToken, connecting, SignOut, error, setError, tokenExpired }
 }
-
-

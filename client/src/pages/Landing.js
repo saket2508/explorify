@@ -21,7 +21,7 @@ export default function Landing() {
                     Loading...
                   </div>
                 : <a href={AUTH_URL}>
-                    <div className="w-72 flex bg-transparent border-2 border-white text-white hover:text-black hover:bg-white font-bold tracking-wider uppercase rounded-full px-6 py-3">
+                    <div className="flex bg-transparent border-2 border-white text-white hover:text-black hover:bg-white font-bold tracking-wider uppercase rounded-full px-6 py-3">
                         <span className="pr-2">
                         <i class="fab fa-spotify"></i>
                         </span>
